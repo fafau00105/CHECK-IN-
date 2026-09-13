@@ -1,529 +1,515 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<title>Event Check-In</title>
-
-<script src="https://unpkg.com/html5-qrcode"></script>
-
-
-<style>
-
-/* =====================================================
-   GLOBAL
-===================================================== */
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  background: #f4f7fb;
-
-  color: #1f2937;
-}
-
-
-.container {
-
-  width: 100%;
-
-  max-width: 520px;
-
-  margin: 0 auto;
-
-  padding:
-    20px
-    16px
-    40px;
-}
-
-
-/* =====================================================
-   HEADER
-===================================================== */
-
-.header {
-
-  text-align: center;
-
-  margin-bottom: 20px;
-}
-
-
-.header h1 {
-
-  margin: 0;
-
-  font-size: 28px;
-
-  font-weight: 700;
-
-  color: #123b68;
-}
-
-
-.header p {
-
-  margin:
-    8px
-    0
-    0;
-
-  color: #64748b;
-
-  font-size: 15px;
-}
-
-
-/* =====================================================
-   CARD
-===================================================== */
-
-.card {
-
-  background: white;
-
-  border-radius: 16px;
-
-  padding: 18px;
-
-  margin-bottom: 16px;
-
-  box-shadow:
-    0 4px 18px
-    rgba(0,0,0,0.07);
-}
-
-
-.section-title {
-
-  font-size: 18px;
-
-  font-weight: 700;
-
-  margin-bottom: 12px;
-
-  color: #123b68;
-}
-
-
-/* =====================================================
-   QR READER
-===================================================== */
-
-#reader {
-
-  width: 100%;
-
-  overflow: hidden;
-
-  border-radius: 12px;
-}
-
-
-#reader video {
-
-  width: 100% !important;
-
-  height: auto !important;
-
-  border-radius: 12px;
-}
-
-
-.camera-status {
-
-  text-align: center;
-
-  margin-top: 10px;
-
-  font-size: 14px;
-
-  color: #64748b;
-}
-
-
-/* =====================================================
-   SEARCH
-===================================================== */
-
-.search-row {
-
-  display: flex;
-
-  gap: 8px;
-}
-
-
-.search-row input {
-
-  flex: 1;
-
-  min-width: 0;
-}
-
-
-input {
-
-  width: 100%;
-
-  padding:
-    13px
-    14px;
-
-  border:
-    1px solid
-    #cbd5e1;
-
-  border-radius: 10px;
-
-  font-size: 16px;
-
-  outline: none;
-}
-
-
-input:focus {
-
-  border-color: #2563eb;
-}
-
-
-button {
-
-  border: none;
-
-  border-radius: 10px;
-
-  padding:
-    13px
-    18px;
-
-  font-size: 15px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-}
-
-
-.search-btn {
-
-  background: #123b68;
-
-  color: white;
-}
-
-
-.search-btn:disabled {
-
-  opacity: 0.6;
-
-  cursor: not-allowed;
-}
-
-
-/* =====================================================
-   SEARCH RESULTS
-===================================================== */
-
-.results {
-
-  margin-top: 15px;
-}
-
-
-.result-card {
-
-  border:
-    1px solid
-    #dbe3ec;
-
-  border-radius: 12px;
-
-  padding: 14px;
-
-  margin-bottom: 10px;
-
-  background: #fff;
-}
-
-
-.result-name {
-
-  font-size: 17px;
-
-  font-weight: 700;
-
-  margin-bottom: 6px;
-}
-
-
-.result-info {
-
-  font-size: 14px;
-
-  color: #64748b;
-
-  line-height: 1.5;
-}
-
-
-.checkin-btn {
-
-  width: 100%;
-
-  margin-top: 12px;
-
-  background: #198754;
-
-  color: white;
-}
-
-
-.already-btn {
-
-  width: 100%;
-
-  margin-top: 12px;
-
-  background: #94a3b8;
-
-  color: white;
-
-  cursor: default;
-}
-
-
-.no-results {
-
-  text-align: center;
-
-  color: #64748b;
-
-  padding:
-    15px
-    5px;
-}
-
-
-/* =====================================================
-   LOADING
-===================================================== */
-
-.loading {
-
-  display: none;
-
-  text-align: center;
-
-  padding: 14px;
-
-  color: #475569;
-
-  font-size: 14px;
-}
-
-
-.divider {
-
-  text-align: center;
-
-  margin:
-    8px
-    0
-    18px;
-
-  color: #94a3b8;
-
-  font-size: 13px;
-}
-
-
-/* =====================================================
-   OVERLAYS
-===================================================== */
-
-.overlay {
-
-  position: fixed;
-
-  inset: 0;
-
-  background:
-    rgba(0,0,0,0.65);
-
-  display: none;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 20px;
-
-  z-index: 9999;
-}
-
-
-.overlay-box {
-
-  width: 100%;
-
-  max-width: 430px;
-
-  background: white;
-
-  border-radius: 20px;
-
-  padding:
-    28px
-    22px;
-
-  text-align: center;
-
-  box-shadow:
-    0 10px 40px
-    rgba(0,0,0,0.25);
-}
-
-
-.status-icon {
-
-  font-size: 58px;
-
-  margin-bottom: 10px;
-}
-
-
-.overlay-title {
-
-  font-size: 27px;
-
-  font-weight: 800;
-
-  margin-bottom: 12px;
-}
-
-
-.overlay-name {
-
-  font-size: 21px;
-
-  font-weight: 700;
-
-  margin-bottom: 8px;
-}
-
-
-.overlay-info {
-
-  color: #64748b;
-
-  font-size: 15px;
-
-  line-height: 1.6;
-}
-
-
-.overlay-message {
-
-  margin-top: 14px;
-
-  font-size: 14px;
-
-  color: #475569;
-
-  line-height: 1.5;
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 480px) {
-
-  .container {
-
-    padding:
-      16px
-      12px
-      30px;
-  }
-
-
-  .header h1 {
-
-    font-size: 25px;
-  }
-
-
-  .card {
-
-    padding: 15px;
-  }
-
-
-  .search-row {
-
-    flex-direction: column;
-  }
-
-
-  .search-btn {
-
-    width: 100%;
-  }
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  >
+
+  <title>Event Check-In</title>
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+      background: #f4f6f8;
+      color: #17212b;
+    }
+
+    body {
+      min-height: 100vh;
+    }
+
+    /* =========================
+       MAIN CONTAINER
+       ========================= */
+
+    .app {
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    .header {
+      padding: 8px 4px 22px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: #17212b;
+    }
+
+    .header p {
+      margin: 6px 0 0;
+      font-size: 14px;
+      color: #687582;
+      font-weight: 400;
+    }
+
+    /* =========================
+       CARD
+       ========================= */
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e3e8ed;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow:
+        0 2px 8px rgba(20, 35, 50, 0.035);
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: #6a7682;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    /* =========================
+       SCANNER
+       ========================= */
+
+    #reader {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #111820;
+    }
+
+    #reader video {
+      width: 100% !important;
+      border-radius: 12px;
+    }
+
+    #reader__scan_region {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    #reader__dashboard {
+      display: none !important;
+    }
+
+    .camera-status {
+      text-align: center;
+      font-size: 12px;
+      color: #7a8691;
+      padding: 10px 0 2px;
+    }
+
+    /* =========================
+       SEARCH
+       ========================= */
+
+    .divider {
+      font-size: 13px;
+      color: #78848f;
+      margin-bottom: 10px;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .search-row input {
+      flex: 1;
+      min-width: 0;
+      height: 46px;
+      border: 1px solid #d9e0e6;
+      border-radius: 10px;
+      padding: 0 13px;
+      font-size: 14px;
+      outline: none;
+      background: #fafbfc;
+      color: #17212b;
+      transition: border-color 0.15s ease,
+                  box-shadow 0.15s ease;
+    }
+
+    .search-row input:focus {
+      border-color: #3f78b5;
+      box-shadow: 0 0 0 3px rgba(63, 120, 181, 0.10);
+      background: #ffffff;
+    }
+
+    .search-btn {
+      height: 46px;
+      padding: 0 18px;
+      border: none;
+      border-radius: 10px;
+      background: #285f92;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition:
+        background 0.15s ease,
+        transform 0.1s ease;
+    }
+
+    .search-btn:hover {
+      background: #214f7b;
+    }
+
+    .search-btn:active {
+      transform: scale(0.98);
+    }
+
+    .search-btn:disabled {
+      opacity: 0.55;
+      cursor: default;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 18px 0 4px;
+      font-size: 13px;
+      color: #6f7b86;
+    }
+
+    /* =========================
+       SEARCH RESULTS
+       ========================= */
+
+    .results {
+      margin-top: 14px;
+    }
+
+    .result-card {
+      border: 1px solid #e0e6eb;
+      border-radius: 13px;
+      padding: 15px;
+      margin-bottom: 10px;
+      background: #fbfcfd;
+    }
+
+    .result-name {
+      font-size: 17px;
+      line-height: 1.25;
+      font-weight: 750;
+      color: #17212b;
+      margin-bottom: 5px;
+    }
+
+    .result-id {
+      font-size: 14px;
+      font-weight: 750;
+      color: #285f92;
+      letter-spacing: 0.3px;
+      margin-bottom: 11px;
+    }
+
+    .result-meta {
+      font-size: 12px;
+      color: #687582;
+      line-height: 1.6;
+    }
+
+    .result-action {
+      width: 100%;
+      height: 42px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 9px;
+      background: #285f92;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+    }
+
+    .result-action.already {
+      background: #f0f2f4;
+      color: #6b747d;
+      cursor: default;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 18px 8px 5px;
+      font-size: 13px;
+      color: #7b8791;
+    }
+
+    /* =========================
+       FULL SCREEN OVERLAYS
+       ========================= */
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(19, 29, 38, 0.62);
+      backdrop-filter: blur(4px);
+    }
+
+    .overlay-box {
+      width: 100%;
+      max-width: 430px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 24px 24px;
+      text-align: center;
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.20);
+    }
+
+    /* =========================
+       STATUS MARK
+       ========================= */
+
+    .status-mark {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .status-mark.success {
+      background: #e8f6ed;
+      color: #23924d;
+    }
+
+    .status-mark.already {
+      background: #fdecec;
+      color: #d33b3b;
+    }
+
+    .status-mark.error {
+      background: #fdecec;
+      color: #d33b3b;
+    }
+
+    .status-mark.processing {
+      width: 52px;
+      height: 52px;
+      border: 4px solid #e5e9ed;
+      border-top-color: #285f92;
+      background: transparent;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================
+       RESULT OVERLAY
+       ========================= */
+
+    .overlay-title {
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: 1px;
+      color: #687582;
+      margin-bottom: 18px;
+    }
+
+    .overlay-name {
+      font-size: 25px;
+      line-height: 1.18;
+      font-weight: 800;
+      color: #17212b;
+      word-break: break-word;
+      margin-bottom: 7px;
+    }
+
+    .overlay-id {
+      font-size: 17px;
+      line-height: 1.3;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #285f92;
+      margin-bottom: 22px;
+    }
+
+    .overlay-info {
+      border-top: 1px solid #edf0f2;
+      padding-top: 15px;
+      margin-top: 2px;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #687582;
+    }
+
+    .overlay-info strong {
+      color: #3c4852;
+      font-weight: 650;
+    }
+
+    .overlay-message {
+      margin-top: 13px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #687582;
+    }
+
+    /* =========================
+       NEXT SCAN BUTTON
+       ========================= */
+
+    .next-scan-btn {
+      width: 100%;
+      height: 50px;
+      margin-top: 24px;
+      border: none;
+      border-radius: 11px;
+      background: #285f92;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      transition:
+        background 0.15s ease,
+        transform 0.1s ease;
+    }
+
+    .next-scan-btn:hover {
+      background: #214f7b;
+    }
+
+    .next-scan-btn:active {
+      transform: scale(0.985);
+    }
+
+    /* =========================
+       PROCESSING
+       ========================= */
+
+    .processing-title {
+      font-size: 15px;
+      font-weight: 750;
+      color: #17212b;
+      margin-bottom: 6px;
+    }
+
+    .processing-message {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #74808a;
+    }
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 480px) {
+
+      .app {
+        padding:
+          14px
+          12px
+          30px;
+      }
+
+      .header {
+        padding:
+          6px
+          3px
+          17px;
+      }
+
+      .header h1 {
+        font-size: 23px;
+      }
+
+      .card {
+        padding: 15px;
+        border-radius: 14px;
+      }
+
+      .overlay {
+        padding: 14px;
+      }
+
+      .overlay-box {
+        padding:
+          27px
+          19px
+          20px;
+        border-radius: 18px;
+      }
+
+      .overlay-name {
+        font-size: 23px;
+      }
+
+      .overlay-id {
+        font-size: 16px;
+      }
+
+      .status-mark {
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+  </style>
 </head>
-
 
 <body>
 
+<div class="app">
 
-<div class="container">
-
-
-  <!-- =================================================
+  <!-- =========================
        HEADER
-  ================================================== -->
+       ========================= -->
 
   <div class="header">
-
-    <h1>
-      EVENT CHECK-IN
-    </h1>
-
-    <p>
-      Scan your QR code to check in
-    </p>
-
+    <h1>EVENT CHECK-IN</h1>
+    <p>Scan your QR code to check in</p>
   </div>
 
 
-  <!-- =================================================
-       QR CHECK-IN
-  ================================================== -->
+  <!-- =========================
+       QR SCANNER
+       ========================= -->
 
   <div class="card">
 
@@ -531,35 +517,30 @@ button {
       QR CHECK-IN
     </div>
 
-
     <div id="reader"></div>
-
 
     <div
       id="cameraStatus"
-      class="camera-status"
-    >
+      class="camera-status">
       Starting camera...
     </div>
 
   </div>
 
 
-  <!-- =================================================
+  <!-- =========================
        MANUAL SEARCH
-  ================================================== -->
+       ========================= -->
 
   <div class="card">
 
     <div class="section-title">
-      Manual Search
+      MANUAL SEARCH
     </div>
-
 
     <div class="divider">
       Search by Name / IC / Unique ID
     </div>
-
 
     <div class="search-row">
 
@@ -570,63 +551,52 @@ button {
         autocomplete="off"
       >
 
-
       <button
         id="searchButton"
         class="search-btn"
-        onclick="performSearch()"
-      >
+        onclick="performSearch()">
         SEARCH
       </button>
 
     </div>
 
-
     <div
       id="loading"
-      class="loading"
-    >
+      class="loading">
       Checking participant...
     </div>
 
-
     <div
       id="results"
-      class="results"
-    ></div>
+      class="results">
+    </div>
 
   </div>
 
 </div>
 
 
-<!-- ===================================================
+<!-- =========================
      PROCESSING OVERLAY
-==================================================== -->
+     ========================= -->
 
 <div
   id="processingOverlay"
-  class="overlay"
->
+  class="overlay">
 
   <div class="overlay-box">
 
-    <div class="status-icon">
-      🔄
+    <div
+      class="status-mark processing">
     </div>
 
-
-    <div class="overlay-title">
+    <div class="processing-title">
       CHECKING PARTICIPANT
     </div>
 
-
-    <div class="overlay-message">
-
+    <div class="processing-message">
       QR code detected.<br>
-
       Please wait...
-
     </div>
 
   </div>
@@ -634,55 +604,58 @@ button {
 </div>
 
 
-<!-- ===================================================
+<!-- =========================
      RESULT OVERLAY
-==================================================== -->
+     ========================= -->
 
 <div
   id="resultOverlay"
-  class="overlay"
->
+  class="overlay">
 
   <div class="overlay-box">
 
     <div
-      id="statusIcon"
-      class="status-icon"
-    >
+      id="statusMark"
+      class="status-mark">
       ✓
     </div>
 
-
     <div
       id="overlayTitle"
-      class="overlay-title"
-    >
+      class="overlay-title">
       CHECK-IN SUCCESSFUL
     </div>
 
-
     <div
       id="overlayName"
-      class="overlay-name"
-    >
+      class="overlay-name">
       -
     </div>
 
+    <div
+      id="overlayId"
+      class="overlay-id">
+      -
+    </div>
 
     <div
       id="overlayInfo"
-      class="overlay-info"
-    >
+      class="overlay-info">
       -
     </div>
-
 
     <div
       id="overlayMessage"
-      class="overlay-message"
-    >
+      class="overlay-message">
       -
     </div>
+
+    <button
+      id="nextScanButton"
+      class="next-scan-btn"
+      onclick="nextScan()">
+      NEXT SCAN
+    </button>
 
   </div>
 
@@ -691,1545 +664,961 @@ button {
 
 <script>
 
-/* =====================================================
-   CONFIGURATION
-===================================================== */
+  /* =========================================================
+     CONFIGURATION
+     ========================================================= */
 
-const BACKEND_URL =
-  "https://script.google.com/macros/s/AKfycbxmfs8QmyTqEEOID7IRM4n5TfpuJAHRsx2SvBam4qR57y51DvlbUop2qkjf7dHWuuyI/exec";
-
-
-/* =====================================================
-   GLOBALS
-===================================================== */
-
-let html5QrCode = null;
-
-let scannerRunning = false;
-
-let currentJsonpScript = null;
+  const BACKEND_URL =
+    "https://script.google.com/macros/s/AKfycbxmfs8QmyTqEEOID7IRM4n5TfpuJAHRsx2SvBam4qR57y51DvlbUop2qkjf7dHWuuyI/exec";
 
 
-/* =====================================================
-   PAGE INITIALIZATION
-===================================================== */
+  /* =========================================================
+     GLOBALS
+     ========================================================= */
 
-window.addEventListener(
-  "load",
-  function() {
+  let html5QrCode = null;
+  let scannerRunning = false;
+  let currentJsonpScript = null;
+
+
+  /* =========================================================
+     PAGE LOAD
+     ========================================================= */
+
+  window.addEventListener("load", function() {
 
     startScanner();
 
-  }
-);
+    document
+      .getElementById("searchInput")
+      .addEventListener("keydown", function(event) {
 
-
-/* =====================================================
-   START SCANNER
-===================================================== */
-
-function startScanner() {
-
-  const status =
-    document.getElementById(
-      "cameraStatus"
-    );
-
-
-  html5QrCode =
-    new Html5Qrcode(
-      "reader"
-    );
-
-
-  html5QrCode
-    .start(
-
-      {
-        facingMode:
-          "environment"
-      },
-
-      {
-
-        fps: 10,
-
-        qrbox:
-          function(
-            viewfinderWidth,
-            viewfinderHeight
-          ) {
-
-            const minDimension =
-              Math.min(
-                viewfinderWidth,
-                viewfinderHeight
-              );
-
-
-            const size =
-              Math.floor(
-                minDimension * 0.70
-              );
-
-
-            return {
-
-              width: size,
-
-              height: size
-
-            };
-
-          }
-
-      },
-
-
-      function(decodedText) {
-
-        if (!scannerRunning) {
-          return;
+        if (event.key === "Enter") {
+          performSearch();
         }
-
-
-        /*
-         * Immediately lock scanner
-         * so the same QR cannot
-         * trigger multiple times.
-         */
-
-        scannerRunning = false;
-
-
-        /*
-         * Actually stop camera.
-         */
-
-        stopScanner();
-
-
-        /*
-         * Send participant ID.
-         */
-
-        sendCheckIn(
-          decodedText
-        );
-
-      },
-
-
-      function(errorMessage) {
-
-        /*
-         * Normal QR scanner noise.
-         * Ignore.
-         */
-
-      }
-
-    )
-
-
-    .then(
-      function() {
-
-        scannerRunning = true;
-
-        status.textContent =
-          "Camera ready — scan participant QR code";
-
-      }
-    )
-
-
-    .catch(
-      function(error) {
-
-        console.error(
-          "Camera error:",
-          error
-        );
-
-
-        status.textContent =
-          "Camera could not start. Please allow camera permission.";
-
-      }
-    );
-
-}
-
-
-/* =====================================================
-   STOP SCANNER
-===================================================== */
-
-async function stopScanner() {
-
-  if (!html5QrCode) {
-
-    scannerRunning =
-      false;
-
-    return;
-
-  }
-
-
-  try {
-
-    await html5QrCode.stop();
-
-  }
-
-  catch (error) {
-
-    console.log(
-      "Scanner stop:",
-      error
-    );
-
-  }
-
-
-  scannerRunning =
-    false;
-
-}
-
-
-/* =====================================================
-   RESTART SCANNER
-===================================================== */
-
-async function restartScanner() {
-
-  const status =
-    document.getElementById(
-      "cameraStatus"
-    );
-
-
-  status.textContent =
-    "Starting camera...";
-
-
-  scannerRunning =
-    false;
-
-
-  /*
-   * Make absolutely sure
-   * the previous scanner
-   * is stopped.
-   */
-
-  if (html5QrCode) {
-
-    try {
-
-      await html5QrCode.stop();
-
-    }
-
-    catch (error) {
-
-      console.log(
-        "Previous scanner already stopped."
-      );
-
-    }
-
-
-    try {
-
-      html5QrCode.clear();
-
-    }
-
-    catch (error) {}
-
-  }
-
-
-  /*
-   * Give the camera a short
-   * moment to fully release.
-   */
-
-  await new Promise(
-    function(resolve) {
-
-      setTimeout(
-        resolve,
-        300
-      );
-
-    }
-  );
-
-
-  /*
-   * Create a fresh scanner.
-   */
-
-  html5QrCode =
-    new Html5Qrcode(
-      "reader"
-    );
-
-
-  html5QrCode
-    .start(
-
-      {
-        facingMode:
-          "environment"
-      },
-
-      {
-
-        fps: 10,
-
-        qrbox:
-          function(
-            viewfinderWidth,
-            viewfinderHeight
-          ) {
-
-            const minDimension =
-              Math.min(
-                viewfinderWidth,
-                viewfinderHeight
-              );
-
-
-            const size =
-              Math.floor(
-                minDimension * 0.70
-              );
-
-
-            return {
-
-              width: size,
-
-              height: size
-
-            };
-
-          }
-
-      },
-
-
-      function(decodedText) {
-
-        if (!scannerRunning) {
-          return;
-        }
-
-
-        /*
-         * Lock scanner immediately.
-         */
-
-        scannerRunning =
-          false;
-
-
-        /*
-         * Stop camera.
-         */
-
-        stopScanner();
-
-
-        /*
-         * Process participant.
-         */
-
-        sendCheckIn(
-          decodedText
-        );
-
-      },
-
-
-      function(errorMessage) {
-
-        /*
-         * Normal scanner noise.
-         */
-
-      }
-
-    )
-
-
-    .then(
-      function() {
-
-        scannerRunning =
-          true;
-
-
-        status.textContent =
-          "Camera ready — scan participant QR code";
-
-      }
-    )
-
-
-    .catch(
-      function(error) {
-
-        console.error(
-          "Camera restart error:",
-          error
-        );
-
-
-        status.textContent =
-          "Camera could not start. Please allow camera permission.";
-
-      }
-    );
-
-}
-
-
-/* =====================================================
-   JSONP BACKEND REQUEST
-===================================================== */
-
-function callBackend(
-  params,
-  callback
-) {
-
-  const callbackName =
-    "backendCallback_" +
-    Date.now() +
-    "_" +
-    Math.floor(
-      Math.random() * 100000
-    );
-
-
-  /*
-   * Create global callback.
-   */
-
-  window[callbackName] =
-    function(data) {
-
-      console.log(
-        "Backend response:",
-        data
-      );
-
-
-      try {
-
-        callback(data);
-
-      }
-
-      finally {
-
-        cleanup();
-
-      }
-
-    };
-
-
-  /*
-   * Create script request.
-   */
-
-  const script =
-    document.createElement(
-      "script"
-    );
-
-
-  currentJsonpScript =
-    script;
-
-
-  const query =
-    new URLSearchParams(
-      params
-    );
-
-
-  query.set(
-    "callback",
-    callbackName
-  );
-
-
-  query.set(
-    "t",
-    Date.now()
-  );
-
-
-  const url =
-    BACKEND_URL +
-    "?" +
-    query.toString();
-
-
-  console.log(
-    "Backend URL:",
-    url
-  );
-
-
-  script.src =
-    url;
-
-
-  script.async =
-    true;
-
-
-  /*
-   * Handle connection failure.
-   */
-
-  script.onerror =
-    function() {
-
-      console.error(
-        "Backend request failed."
-      );
-
-
-      callback({
-
-        success: false,
-
-        status: "ERROR",
-
-        message:
-          "Unable to connect to check-in server."
 
       });
 
-
-      cleanup();
-
-    };
+  });
 
 
-  document.body.appendChild(
-    script
-  );
+  /* =========================================================
+     START SCANNER
+     ========================================================= */
 
+  async function startScanner() {
 
-  /*
-   * Cleanup JSONP script.
-   */
+    const cameraStatus =
+      document.getElementById("cameraStatus");
 
-  function cleanup() {
+    cameraStatus.textContent =
+      "Starting camera...";
+
+    scannerRunning = false;
 
     try {
 
-      delete window[
-        callbackName
-      ];
+      html5QrCode =
+        new Html5Qrcode("reader");
+
+      await html5QrCode.start(
+        {
+          facingMode: "environment"
+        },
+        {
+          fps: 10,
+          qrbox: {
+            width: 250,
+            height: 250
+          },
+          aspectRatio: 1.0
+        },
+
+        async function(decodedText) {
+
+          if (!scannerRunning) {
+            return;
+          }
+
+          scannerRunning = false;
+
+          /*
+           * IMPORTANT:
+           * Fully stop scanner before processing.
+           */
+
+          await stopScanner();
+
+          sendCheckIn(decodedText);
+
+        },
+
+        function(errorMessage) {
+          // Ignore continuous scanner errors.
+        }
+      );
+
+      scannerRunning = true;
+
+      cameraStatus.textContent =
+        "Camera ready — scan participant QR code";
 
     }
 
     catch (error) {
 
-      window[
-        callbackName
-      ] = undefined;
+      console.error(
+        "Camera error:",
+        error
+      );
+
+      cameraStatus.textContent =
+        "Unable to start camera. Please allow camera access.";
 
     }
 
+  }
 
-    if (script.parentNode) {
 
-      script.parentNode.removeChild(
-        script
+  /* =========================================================
+     STOP SCANNER
+     ========================================================= */
+
+  async function stopScanner() {
+
+    if (!html5QrCode) {
+      scannerRunning = false;
+      return;
+    }
+
+    try {
+
+      if (scannerRunning) {
+        await html5QrCode.stop();
+      }
+
+    }
+
+    catch (error) {
+
+      console.log(
+        "Scanner stop:",
+        error
+      );
+
+    }
+
+    scannerRunning = false;
+
+  }
+
+
+  /* =========================================================
+     NEXT SCAN
+     ========================================================= */
+
+  async function nextScan() {
+
+    /*
+     * Hide result first.
+     */
+
+    document
+      .getElementById("resultOverlay")
+      .style.display = "none";
+
+
+    /*
+     * Clear previous search.
+     */
+
+    document
+      .getElementById("results")
+      .innerHTML = "";
+
+    document
+      .getElementById("searchInput")
+      .value = "";
+
+
+    /*
+     * Make sure old scanner is completely stopped.
+     */
+
+    scannerRunning = false;
+
+    try {
+
+      if (html5QrCode) {
+
+        try {
+          await html5QrCode.stop();
+        }
+        catch (e) {}
+
+        try {
+          await html5QrCode.clear();
+        }
+        catch (e) {}
+
+      }
+
+    }
+
+    catch (error) {
+
+      console.log(
+        "Scanner cleanup:",
+        error
       );
 
     }
 
 
-    if (
-      currentJsonpScript ===
-      script
-    ) {
+    /*
+     * Small delay prevents camera lifecycle conflict.
+     */
+
+    await new Promise(function(resolve) {
+      setTimeout(resolve, 250);
+    });
+
+
+    /*
+     * Start a completely fresh scanner.
+     */
+
+    await startScanner();
+
+  }
+
+
+  /* =========================================================
+     SEND CHECK-IN
+     ========================================================= */
+
+  function sendCheckIn(uniqueId) {
+
+    uniqueId =
+      String(uniqueId || "").trim();
+
+    if (!uniqueId) {
+
+      showResult({
+        success: false,
+        status: "ERROR",
+        message: "Invalid QR code."
+      });
+
+      return;
+    }
+
+
+    /*
+     * Immediate feedback.
+     */
+
+    showProcessing();
+
+
+    callBackend(
+      {
+        action: "checkin",
+        id: uniqueId
+      },
+
+      function(data) {
+
+        handleBackendResult(data);
+
+      }
+    );
+
+  }
+
+
+  /* =========================================================
+     BACKEND JSONP
+     ========================================================= */
+
+  function callBackend(params, callback) {
+
+    const callbackName =
+      "backendCallback_" +
+      Date.now() +
+      "_" +
+      Math.floor(
+        Math.random() * 100000
+      );
+
+
+    window[callbackName] =
+      function(data) {
+
+        cleanupJsonp();
+
+        callback(data);
+
+      };
+
+
+    const query =
+      new URLSearchParams();
+
+
+    Object.keys(params).forEach(function(key) {
+
+      query.append(
+        key,
+        params[key]
+      );
+
+    });
+
+
+    query.append(
+      "callback",
+      callbackName
+    );
+
+
+    query.append(
+      "t",
+      Date.now()
+    );
+
+
+    const script =
+      document.createElement("script");
+
+
+    currentJsonpScript =
+      script;
+
+
+    script.src =
+      BACKEND_URL +
+      "?" +
+      query.toString();
+
+
+    script.onerror =
+      function() {
+
+        cleanupJsonp();
+
+        callback({
+          success: false,
+          status: "ERROR",
+          message:
+            "Unable to connect to check-in server."
+        });
+
+      };
+
+
+    document
+      .body
+      .appendChild(script);
+
+  }
+
+
+  /* =========================================================
+     CLEANUP JSONP
+     ========================================================= */
+
+  function cleanupJsonp() {
+
+    if (currentJsonpScript) {
+
+      currentJsonpScript.remove();
 
       currentJsonpScript =
         null;
 
     }
 
+    Object.keys(window)
+      .filter(function(key) {
+
+        return key.startsWith(
+          "backendCallback_"
+        );
+
+      })
+      .forEach(function(key) {
+
+        delete window[key];
+
+      });
+
   }
 
-}
+
+  /* =========================================================
+     HANDLE BACKEND RESULT
+     ========================================================= */
+
+  function handleBackendResult(data) {
+
+    hideProcessing();
 
 
-/* =====================================================
-   QR CHECK-IN
-===================================================== */
+    if (!data) {
 
-function sendCheckIn(
-  uniqueId
-) {
+      showResult({
+        success: false,
+        status: "ERROR",
+        message:
+          "No response received from server."
+      });
 
-  uniqueId =
-    String(
-      uniqueId || ""
-    ).trim();
+      return;
+
+    }
 
 
-  if (!uniqueId) {
+    if (
+      data.status ===
+      "CHECKED_IN"
+    ) {
+
+      showResult(data);
+
+      return;
+
+    }
+
+
+    if (
+      data.status ===
+      "ALREADY_CHECKED_IN"
+    ) {
+
+      showResult(data);
+
+      return;
+
+    }
+
+
+    if (
+      data.status ===
+      "NOT_FOUND"
+    ) {
+
+      showResult({
+        success: false,
+        status: "NOT_FOUND",
+        message:
+          "Participant was not found."
+      });
+
+      return;
+
+    }
+
 
     showResult({
-
       success: false,
-
       status: "ERROR",
-
       message:
-        "Invalid QR code."
-
+        data.message ||
+        "Unable to process check-in."
     });
 
+  }
 
-    return;
+
+  /* =========================================================
+     PROCESSING OVERLAY
+     ========================================================= */
+
+  function showProcessing() {
+
+    document
+      .getElementById("processingOverlay")
+      .style.display = "flex";
 
   }
 
 
-  /*
-   * Immediate user feedback.
-   */
+  function hideProcessing() {
 
-  showProcessing();
+    document
+      .getElementById("processingOverlay")
+      .style.display = "none";
 
-
-  /*
-   * Contact Apps Script.
-   */
-
-  callBackend(
-
-    {
-
-      action:
-        "checkin",
-
-      id:
-        uniqueId
-
-    },
+  }
 
 
-    function(data) {
+  /* =========================================================
+     RESULT DISPLAY
+     ========================================================= */
 
-      handleBackendResult(
-        data
+  function showResult(data) {
+
+    hideProcessing();
+
+
+    const overlay =
+      document.getElementById(
+        "resultOverlay"
       );
 
-    }
+    const statusMark =
+      document.getElementById(
+        "statusMark"
+      );
 
-  );
+    const title =
+      document.getElementById(
+        "overlayTitle"
+      );
 
-}
+    const name =
+      document.getElementById(
+        "overlayName"
+      );
 
+    const id =
+      document.getElementById(
+        "overlayId"
+      );
 
-/* =====================================================
-   MANUAL SEARCH
-===================================================== */
+    const info =
+      document.getElementById(
+        "overlayInfo"
+      );
 
-function performSearch() {
-
-  const input =
-    document.getElementById(
-      "searchInput"
-    );
-
-
-  const query =
-    input.value.trim();
-
-
-  if (!query) {
-
-    input.focus();
-
-    return;
-
-  }
-
-
-  console.log(
-    "Searching:",
-    query
-  );
+    const message =
+      document.getElementById(
+        "overlayMessage"
+      );
 
 
-  showLoading();
+    /*
+     * Reset classes.
+     */
+
+    statusMark.className =
+      "status-mark";
 
 
-  document.getElementById(
-    "results"
-  ).innerHTML = "";
+    /*
+     * SUCCESS
+     */
 
+    if (
+      data.status ===
+      "CHECKED_IN"
+    ) {
 
-  callBackend(
+      statusMark.classList.add(
+        "success"
+      );
 
-    {
+      statusMark.textContent =
+        "✓";
 
-      action:
-        "search",
+      title.textContent =
+        "CHECK-IN SUCCESSFUL";
 
-      q:
-        query
+      name.textContent =
+        data.name || "-";
 
-    },
+      id.textContent =
+        data.uniqueId || "-";
 
-
-    function(data) {
-
-      hideLoading();
-
-
-      if (
-        !data ||
-        data.status !==
-          "SEARCH_RESULTS"
-      ) {
-
-        displaySearchResults(
-          []
+      info.innerHTML =
+        "<strong>IC</strong> " +
+        escapeHtml(
+          maskIC(data.ic || "-")
+        ) +
+        "<br>" +
+        "<strong>CHECK-IN TIME</strong> " +
+        escapeHtml(
+          data.checkInTime || "-"
         );
 
-        return;
+      message.textContent =
+        "Participant successfully checked in.";
 
-      }
+    }
 
 
-      displaySearchResults(
-        data.results || []
+    /*
+     * ALREADY CHECKED IN
+     */
+
+    else if (
+      data.status ===
+      "ALREADY_CHECKED_IN"
+    ) {
+
+      statusMark.classList.add(
+        "already"
       );
 
-    }
+      statusMark.textContent =
+        "✓";
 
-  );
+      title.textContent =
+        "ALREADY CHECKED IN";
 
-}
+      name.textContent =
+        data.name || "-";
 
+      id.textContent =
+        data.uniqueId || "-";
 
-/* =====================================================
-   ENTER KEY SEARCH
-===================================================== */
+      info.innerHTML =
+        "<strong>IC</strong> " +
+        escapeHtml(
+          maskIC(data.ic || "-")
+        ) +
+        "<br>" +
+        "<strong>ORIGINAL CHECK-IN</strong> " +
+        escapeHtml(
+          data.checkInTime || "-"
+        );
 
-document
-  .getElementById(
-    "searchInput"
-  )
-  .addEventListener(
-    "keydown",
-    function(event) {
-
-      if (
-        event.key ===
-        "Enter"
-      ) {
-
-        event.preventDefault();
-
-        performSearch();
-
-      }
+      message.textContent =
+        "This participant has already checked in.";
 
     }
-  );
 
 
-/* =====================================================
-   DISPLAY SEARCH RESULTS
-===================================================== */
+    /*
+     * NOT FOUND / ERROR
+     */
 
-function displaySearchResults(
-  results
-) {
+    else {
 
-  const container =
-    document.getElementById(
-      "results"
-    );
+      statusMark.classList.add(
+        "error"
+      );
+
+      statusMark.textContent =
+        "×";
+
+      title.textContent =
+        data.status ===
+        "NOT_FOUND"
+          ? "PARTICIPANT NOT FOUND"
+          : "CHECK-IN FAILED";
+
+      name.textContent =
+        "";
+
+      id.textContent =
+        "";
+
+      info.innerHTML =
+        "";
+
+      message.textContent =
+        data.message ||
+        "Unable to complete check-in.";
+
+    }
 
 
-  container.innerHTML =
-    "";
+    /*
+     * Display result.
+     */
 
-
-  if (
-    !results ||
-    results.length === 0
-  ) {
-
-    container.innerHTML =
-      '<div class="no-results">' +
-      'No participant found.' +
-      '</div>';
-
-
-    return;
+    overlay.style.display =
+      "flex";
 
   }
 
 
-  results.forEach(
-    function(person) {
+  /* =========================================================
+     MANUAL SEARCH
+     ========================================================= */
+
+  function performSearch() {
+
+    const input =
+      document.getElementById(
+        "searchInput"
+      );
+
+    const query =
+      input.value.trim();
+
+
+    if (!query) {
+      return;
+    }
+
+
+    showLoading();
+
+    document
+      .getElementById("results")
+      .innerHTML = "";
+
+
+    callBackend(
+      {
+        action: "search",
+        q: query
+      },
+
+      function(data) {
+
+        hideLoading();
+
+        displaySearchResults(data);
+
+      }
+    );
+
+  }
+
+
+  /* =========================================================
+     DISPLAY SEARCH RESULTS
+     ========================================================= */
+
+  function displaySearchResults(data) {
+
+    const container =
+      document.getElementById(
+        "results"
+      );
+
+
+    container.innerHTML = "";
+
+
+    if (
+      !data ||
+      !data.results ||
+      data.results.length === 0
+    ) {
+
+      container.innerHTML =
+        '<div class="no-results">' +
+        'No participant found.' +
+        '</div>';
+
+      return;
+
+    }
+
+
+    data.results.forEach(function(item) {
 
       const card =
-        document.createElement(
-          "div"
-        );
-
+        document.createElement("div");
 
       card.className =
         "result-card";
 
 
-      /*
-       * NAME
-       */
-
       const name =
-        document.createElement(
-          "div"
-        );
-
-
-      name.className =
-        "result-name";
-
-
-      name.textContent =
-        person.name || "-";
-
-
-      /*
-       * DETAILS
-       */
-
-      const info =
-        document.createElement(
-          "div"
-        );
-
-
-      info.className =
-        "result-info";
-
-
-      let html = "";
-
-
-      html +=
-        "IC: " +
         escapeHtml(
-          maskIC(
-            person.ic || ""
-          )
-        ) +
-        "<br>";
+          item.name || "-"
+        );
 
-
-      html +=
-        "Unique ID: " +
+      const uniqueId =
         escapeHtml(
-          person.uniqueId || ""
+          item.uniqueId || "-"
+        );
+
+      const ic =
+        escapeHtml(
+          maskIC(item.ic || "-")
         );
 
 
-      if (
-        person.checkedIn
-      ) {
+      let html =
+
+        '<div class="result-name">' +
+          name +
+        '</div>' +
+
+        '<div class="result-id">' +
+          uniqueId +
+        '</div>' +
+
+        '<div class="result-meta">' +
+          'IC: ' +
+          ic;
+
+
+      if (item.checkInTime) {
 
         html +=
-          "<br>Checked in: " +
+          '<br>Checked in: ' +
           escapeHtml(
-            person.checkInTime || ""
+            item.checkInTime
           );
 
       }
 
 
-      info.innerHTML =
-        html;
+      html +=
+        '</div>';
 
 
-      card.appendChild(
-        name
-      );
+      if (item.checkedIn) {
 
+        html +=
 
-      card.appendChild(
-        info
-      );
-
-
-      /*
-       * CHECK-IN BUTTON
-       */
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-
-      if (
-        person.checkedIn
-      ) {
-
-        button.className =
-          "already-btn";
-
-
-        button.textContent =
-          "ALREADY CHECKED IN";
-
-
-        button.disabled =
-          true;
+          '<button ' +
+          'class="result-action already" ' +
+          'disabled>' +
+          'ALREADY CHECKED IN' +
+          '</button>';
 
       }
 
       else {
 
-        button.className =
-          "checkin-btn";
+        html +=
 
-
-        button.textContent =
-          "CHECK IN";
-
-
-        button.onclick =
-          function() {
-
-            manualCheckIn(
-              person.uniqueId
-            );
-
-          };
+          '<button ' +
+          'class="result-action" ' +
+          'onclick="manualCheckIn(\'' +
+          escapeAttribute(
+            item.uniqueId
+          ) +
+          '\')">' +
+          'CHECK IN' +
+          '</button>';
 
       }
 
 
-      card.appendChild(
-        button
-      );
+      card.innerHTML =
+        html;
 
 
       container.appendChild(
         card
       );
 
+    });
+
+  }
+
+
+  /* =========================================================
+     MANUAL CHECK-IN
+     ========================================================= */
+
+  function manualCheckIn(uniqueId) {
+
+    showProcessing();
+
+
+    callBackend(
+      {
+        action: "checkin",
+        id: uniqueId
+      },
+
+      function(data) {
+
+        handleBackendResult(data);
+
+      }
+    );
+
+  }
+
+
+  /* =========================================================
+     SEARCH LOADING
+     ========================================================= */
+
+  function showLoading() {
+
+    document
+      .getElementById("loading")
+      .style.display = "block";
+
+    document
+      .getElementById("searchButton")
+      .disabled = true;
+
+  }
+
+
+  function hideLoading() {
+
+    document
+      .getElementById("loading")
+      .style.display = "none";
+
+    document
+      .getElementById("searchButton")
+      .disabled = false;
+
+  }
+
+
+  /* =========================================================
+     MASK IC
+     ========================================================= */
+
+  function maskIC(ic) {
+
+    ic =
+      String(ic || "");
+
+
+    if (
+      ic.length <= 4
+    ) {
+
+      return ic;
+
     }
-  );
 
-}
 
-
-/* =====================================================
-   MANUAL CHECK-IN
-===================================================== */
-
-function manualCheckIn(
-  uniqueId
-) {
-
-  showProcessing();
-
-
-  callBackend(
-
-    {
-
-      action:
-        "checkin",
-
-      id:
-        uniqueId
-
-    },
-
-
-    function(data) {
-
-      handleBackendResult(
-        data
-      );
-
-    }
-
-  );
-
-}
-
-
-/* =====================================================
-   HANDLE BACKEND RESULT
-===================================================== */
-
-function handleBackendResult(
-  data
-) {
-
-  console.log(
-    "Handling result:",
-    data
-  );
-
-
-  /*
-   * Remove processing overlay.
-   */
-
-  document.getElementById(
-    "processingOverlay"
-  ).style.display =
-    "none";
-
-
-  if (!data) {
-
-    showResult({
-
-      success: false,
-
-      status: "ERROR",
-
-      message:
-        "No response received."
-
-    });
-
-
-    return;
-
-  }
-
-
-  /*
-   * SUCCESS
-   */
-
-  if (
-    data.status ===
-    "CHECKED_IN"
-  ) {
-
-    showResult({
-
-      success:
-        true,
-
-      status:
-        "CHECKED_IN",
-
-      name:
-        data.name,
-
-      ic:
-        data.ic,
-
-      uniqueId:
-        data.uniqueId,
-
-      checkInTime:
-        data.checkInTime,
-
-      message:
-        data.message
-
-    });
-
-
-    return;
-
-  }
-
-
-  /*
-   * ALREADY CHECKED IN
-   */
-
-  if (
-    data.status ===
-    "ALREADY_CHECKED_IN"
-  ) {
-
-    showResult({
-
-      success:
-        false,
-
-      status:
-        "ALREADY_CHECKED_IN",
-
-      name:
-        data.name,
-
-      ic:
-        data.ic,
-
-      uniqueId:
-        data.uniqueId,
-
-      checkInTime:
-        data.checkInTime,
-
-      message:
-        data.message
-
-    });
-
-
-    return;
-
-  }
-
-
-  /*
-   * NOT FOUND
-   */
-
-  if (
-    data.status ===
-    "NOT_FOUND"
-  ) {
-
-    showResult({
-
-      success:
-        false,
-
-      status:
-        "NOT_FOUND",
-
-      message:
-        "Participant not found."
-
-    });
-
-
-    return;
-
-  }
-
-
-  /*
-   * OTHER ERROR
-   */
-
-  showResult({
-
-    success:
-      false,
-
-    status:
-      "ERROR",
-
-    message:
-      data.message ||
-      "Something went wrong."
-
-  });
-
-}
-
-
-/* =====================================================
-   PROCESSING OVERLAY
-===================================================== */
-
-function showProcessing() {
-
-  const overlay =
-    document.getElementById(
-      "processingOverlay"
-    );
-
-
-  overlay.style.display =
-    "flex";
-
-}
-
-
-/* =====================================================
-   RESULT OVERLAY
-===================================================== */
-
-function showResult(
-  data
-) {
-
-  /*
-   * Hide processing overlay.
-   */
-
-  document.getElementById(
-    "processingOverlay"
-  ).style.display =
-    "none";
-
-
-  const overlay =
-    document.getElementById(
-      "resultOverlay"
-    );
-
-
-  const icon =
-    document.getElementById(
-      "statusIcon"
-    );
-
-
-  const title =
-    document.getElementById(
-      "overlayTitle"
-    );
-
-
-  const name =
-    document.getElementById(
-      "overlayName"
-    );
-
-
-  const info =
-    document.getElementById(
-      "overlayInfo"
-    );
-
-
-  const message =
-    document.getElementById(
-      "overlayMessage"
-    );
-
-
-  /*
-   * SUCCESS
-   */
-
-  if (
-    data.status ===
-    "CHECKED_IN"
-  ) {
-
-    icon.textContent =
-      "✓";
-
-
-    title.textContent =
-      "CHECK-IN SUCCESSFUL";
-
-
-    name.textContent =
-      data.name || "-";
-
-
-    info.innerHTML =
-
-      "IC: " +
-
-      escapeHtml(
-        maskIC(
-          data.ic || ""
-        )
-      ) +
-
-      "<br>" +
-
-      "Unique ID: " +
-
-      escapeHtml(
-        data.uniqueId || ""
-      ) +
-
-      "<br>" +
-
-      "Time: " +
-
-      escapeHtml(
-        data.checkInTime || ""
-      );
-
-
-    message.textContent =
-      "Thank you. You are successfully checked in.";
-
-  }
-
-
-  /*
-   * ALREADY CHECKED IN
-   */
-
-  else if (
-    data.status ===
-    "ALREADY_CHECKED_IN"
-  ) {
-
-    icon.textContent =
-      "✓";
-
-
-    title.textContent =
-      "ALREADY CHECKED IN";
-
-
-    name.textContent =
-      data.name || "-";
-
-
-    info.innerHTML =
-
-      "IC: " +
-
-      escapeHtml(
-        maskIC(
-          data.ic || ""
-        )
-      ) +
-
-      "<br>" +
-
-      "Unique ID: " +
-
-      escapeHtml(
-        data.uniqueId || ""
-      ) +
-
-      "<br>" +
-
-      "Original check-in: " +
-
-      escapeHtml(
-        data.checkInTime || ""
-      );
-
-
-    message.textContent =
-      "This participant has already checked in.";
-
-  }
-
-
-  /*
-   * ERROR
-   */
-
-  else {
-
-    icon.textContent =
-      "⚠";
-
-
-    title.textContent =
-      "CHECK-IN ERROR";
-
-
-    name.textContent =
-      "";
-
-
-    info.textContent =
-      "";
-
-
-    message.textContent =
-      data.message ||
-      "Unable to complete check-in.";
-
-  }
-
-
-  /*
-   * Show result.
-   */
-
-  overlay.style.display =
-    "flex";
-
-
-  /*
-   * Automatically return
-   * to scanner.
-   */
-
-  setTimeout(
-    async function() {
-
-      overlay.style.display =
-        "none";
-
-
-      document.getElementById(
-        "results"
-      ).innerHTML =
-        "";
-
-
-      document.getElementById(
-        "searchInput"
-      ).value =
-        "";
-
-
-      /*
-       * Restart camera.
-       */
-
-      await restartScanner();
-
-    },
-    2200
-  );
-
-}
-
-
-/* =====================================================
-   LOADING
-===================================================== */
-
-function showLoading() {
-
-  document.getElementById(
-    "loading"
-  ).style.display =
-    "block";
-
-
-  document.getElementById(
-    "searchButton"
-  ).disabled =
-    true;
-
-}
-
-
-function hideLoading() {
-
-  document.getElementById(
-    "loading"
-  ).style.display =
-    "none";
-
-
-  document.getElementById(
-    "searchButton"
-  ).disabled =
-    false;
-
-}
-
-
-/* =====================================================
-   MASK IC
-===================================================== */
-
-function maskIC(
-  ic
-) {
-
-  if (!ic) {
-
-    return "";
-
-  }
-
-
-  const value =
-    String(ic);
-
-
-  if (
-    value.length <= 4
-  ) {
-
-    return value;
-
-  }
-
-
-  return (
-
-    "*".repeat(
-      value.length - 4
+    return "*".repeat(
+      ic.length - 4
     ) +
+    ic.slice(-4);
 
-    value.slice(-4)
-
-  );
-
-}
+  }
 
 
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
+  /* =========================================================
+     ESCAPE HTML
+     ========================================================= */
 
-function escapeHtml(
-  value
-) {
+  function escapeHtml(value) {
 
-  return String(value)
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
 
-    .replace(
-      /&/g,
-      "&amp;"
-    )
+  }
 
-    .replace(
-      /</g,
-      "&lt;"
-    )
 
-    .replace(
-      />/g,
-      "&gt;"
-    )
+  /* =========================================================
+     ESCAPE ATTRIBUTE
+     ========================================================= */
 
-    .replace(
-      /"/g,
-      "&quot;"
-    )
+  function escapeAttribute(value) {
 
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    return String(value)
+      .replace(/\\/g, "\\\\")
+      .replace(/'/g, "\\'");
 
-}
+  }
 
 </script>
 
-
 </body>
 </html>
-
