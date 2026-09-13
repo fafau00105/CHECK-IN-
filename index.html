@@ -1,16 +1,24 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
 
   <title>Event Check-In</title>
 
-  <!-- QR SCANNER LIBRARY -->
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <!-- QR SCANNER -->
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript">
+  </script>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -25,8 +33,8 @@
     .app {
       width: 100%;
       max-width: 600px;
-      margin: auto;
       min-height: 100vh;
+      margin: auto;
       background: white;
     }
 
@@ -49,17 +57,23 @@
 
     .header p {
       margin: 6px 0 0;
-      opacity: 0.9;
       font-size: 14px;
+      opacity: 0.9;
     }
 
+
     /* =========================
-       MAIN
+       CONTENT
        ========================= */
 
     .content {
       padding: 18px;
     }
+
+
+    /* =========================
+       SCANNER
+       ========================= */
 
     .scanner-card {
       background: white;
@@ -79,7 +93,6 @@
       border-radius: 12px;
     }
 
-    /* Hide unnecessary html5-qrcode UI text/buttons */
     #reader__dashboard_section_swaplink {
       display: none !important;
     }
@@ -90,6 +103,7 @@
       font-size: 14px;
       color: #64748b;
     }
+
 
     /* =========================
        SEARCH
@@ -128,10 +142,10 @@
     }
 
     .btn {
+      height: 46px;
+      padding: 0 18px;
       border: none;
       border-radius: 10px;
-      padding: 0 18px;
-      height: 46px;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
@@ -142,18 +156,8 @@
       color: white;
     }
 
-    .btn-secondary {
-      background: #e2e8f0;
-      color: #1e293b;
-    }
-
     .btn-success {
       background: #16a34a;
-      color: white;
-    }
-
-    .btn-danger {
-      background: #dc2626;
       color: white;
     }
 
@@ -161,6 +165,7 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
+
 
     /* =========================
        SEARCH RESULTS
@@ -193,8 +198,9 @@
       margin-top: 10px;
     }
 
+
     /* =========================
-       OVERLAY
+       RESULT OVERLAY
        ========================= */
 
     .overlay {
@@ -227,9 +233,11 @@
       height: 90px;
       border-radius: 50%;
       margin: 0 auto 18px;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       font-size: 48px;
       font-weight: bold;
     }
@@ -279,6 +287,7 @@
       color: #94a3b8;
     }
 
+
     /* =========================
        LOADING
        ========================= */
@@ -304,9 +313,11 @@
     .spinner {
       width: 48px;
       height: 48px;
+
       border: 5px solid #e2e8f0;
       border-top-color: #0f4c81;
       border-radius: 50%;
+
       animation: spin 0.8s linear infinite;
       margin: auto;
     }
@@ -318,10 +329,13 @@
     }
 
     @keyframes spin {
+
       to {
         transform: rotate(360deg);
       }
+
     }
+
 
     /* =========================
        MOBILE
@@ -350,38 +364,65 @@
       }
 
     }
+
   </style>
+
 </head>
+
 
 <body>
 
 <div class="app">
 
-  <!-- HEADER -->
+
+  <!-- =========================
+       HEADER
+       ========================= -->
+
   <div class="header">
-    <h1>EVENT CHECK-IN</h1>
-    <p>Scan your QR code to check in</p>
+
+    <h1>
+      EVENT CHECK-IN
+    </h1>
+
+    <p>
+      Scan your QR code to check in
+    </p>
+
   </div>
+
 
   <div class="content">
 
-    <!-- SCANNER -->
+
+    <!-- =========================
+         SCANNER
+         ========================= -->
+
     <div class="scanner-card">
 
       <div id="reader"></div>
 
-      <div class="scanner-status" id="scannerStatus">
+      <div
+        class="scanner-status"
+        id="scannerStatus"
+      >
         Starting camera...
       </div>
 
     </div>
 
-    <!-- MANUAL SEARCH -->
+
+    <!-- =========================
+         MANUAL SEARCH
+         ========================= -->
+
     <div class="search-section">
 
       <div class="search-title">
         Manual Search
       </div>
+
 
       <div class="search-row">
 
@@ -403,7 +444,11 @@
 
       </div>
 
-      <div id="searchResults" class="results"></div>
+
+      <div
+        id="searchResults"
+        class="results">
+      </div>
 
     </div>
 
@@ -412,33 +457,56 @@
 </div>
 
 
-<!-- RESULT OVERLAY -->
+<!-- =========================
+     RESULT OVERLAY
+     ========================= -->
 
-<div id="resultOverlay" class="overlay">
+<div
+  id="resultOverlay"
+  class="overlay"
+>
 
   <div class="result-box">
 
-    <div id="resultIcon" class="result-icon">
+    <div
+      id="resultIcon"
+      class="result-icon"
+    >
       ✓
     </div>
 
-    <div id="resultTitle" class="result-title">
+    <div
+      id="resultTitle"
+      class="result-title"
+    >
       CHECK-IN SUCCESS
     </div>
 
-    <div id="resultName" class="result-name-large">
+    <div
+      id="resultName"
+      class="result-name-large"
+    >
       -
     </div>
 
-    <div id="resultDetails" class="result-details">
+    <div
+      id="resultDetails"
+      class="result-details"
+    >
       -
     </div>
 
-    <div id="resultMessage" class="result-message">
+    <div
+      id="resultMessage"
+      class="result-message"
+    >
       -
     </div>
 
-    <div id="countdown" class="countdown">
+    <div
+      id="countdown"
+      class="countdown"
+    >
       Returning to scanner...
     </div>
 
@@ -447,9 +515,14 @@
 </div>
 
 
-<!-- LOADING -->
+<!-- =========================
+     LOADING
+     ========================= -->
 
-<div id="loading" class="loading">
+<div
+  id="loading"
+  class="loading"
+>
 
   <div class="loading-box">
 
@@ -464,7 +537,9 @@
 </div>
 
 
-<!-- HIDDEN BACKEND IFRAME -->
+<!-- =========================
+     HIDDEN APPS SCRIPT IFRAME
+     ========================= -->
 
 <iframe
   id="backendFrame"
@@ -475,6 +550,7 @@
 
 
 <script>
+
 
 /*******************************************************
  * CONFIGURATION
@@ -498,18 +574,23 @@ let resetTimer = null;
 
 
 /*******************************************************
- * START CAMERA
+ * START SCANNER
  *******************************************************/
 
 async function startScanner() {
 
   const status =
-    document.getElementById("scannerStatus");
+    document.getElementById(
+      "scannerStatus"
+    );
 
   try {
 
     html5QrCode =
-      new Html5Qrcode("reader");
+      new Html5Qrcode(
+        "reader"
+      );
+
 
     await html5QrCode.start(
 
@@ -518,41 +599,61 @@ async function startScanner() {
       },
 
       {
+
         fps: 10,
 
-        qrbox: function(viewfinderWidth, viewfinderHeight) {
+        qrbox:
+          function(
+            viewfinderWidth,
+            viewfinderHeight
+          ) {
 
-          const size =
-            Math.min(
-              viewfinderWidth,
-              viewfinderHeight
-            ) * 0.70;
+            const size =
+              Math.min(
+                viewfinderWidth,
+                viewfinderHeight
+              ) * 0.70;
 
-          return {
-            width: size,
-            height: size
-          };
-        },
+            return {
+
+              width: size,
+
+              height: size
+
+            };
+
+          },
 
         aspectRatio: 1.0
+
       },
 
       onQrSuccess,
 
       function(errorMessage) {
-        // Ignore normal scanning errors.
+
+        // Normal scanning errors
+        // are ignored.
+
       }
 
     );
+
 
     scannerRunning = true;
 
     status.textContent =
       "Point the camera at the QR code";
 
-  } catch (error) {
 
-    console.error(error);
+  }
+
+  catch (error) {
+
+    console.error(
+      "Camera error:",
+      error
+    );
 
     status.innerHTML =
       "Camera could not start.<br>" +
@@ -564,10 +665,12 @@ async function startScanner() {
 
 
 /*******************************************************
- * QR SCANNED
+ * QR SUCCESS
  *******************************************************/
 
-async function onQrSuccess(decodedText) {
+async function onQrSuccess(
+  decodedText
+) {
 
   if (processingScan) {
     return;
@@ -575,8 +678,12 @@ async function onQrSuccess(decodedText) {
 
   processingScan = true;
 
+
   const uniqueId =
-    extractUniqueId(decodedText);
+    extractUniqueId(
+      decodedText
+    );
+
 
   console.log(
     "QR scanned:",
@@ -588,11 +695,16 @@ async function onQrSuccess(decodedText) {
     uniqueId
   );
 
+
   await stopScanner();
+
 
   showLoading();
 
-  sendCheckIn(uniqueId);
+
+  sendCheckIn(
+    uniqueId
+  );
 
 }
 
@@ -601,23 +713,30 @@ async function onQrSuccess(decodedText) {
  * EXTRACT UNIQUE ID
  *******************************************************/
 
-function extractUniqueId(text) {
+function extractUniqueId(
+  text
+) {
 
   text =
     String(text || "")
       .trim();
 
+
   /*
-   * Current QR format:
+   * Normal QR:
    *
-   * UNIQUE ID
+   * ABC001
    *
-   * If an older QR happens to contain
-   * pipe-separated information, we use
-   * the first field.
+   * If QR contains:
+   *
+   * ABC001|NAME|IC
+   *
+   * we take the first part.
    */
 
-  if (text.includes("|")) {
+  if (
+    text.includes("|")
+  ) {
 
     return text
       .split("|")[0]
@@ -625,20 +744,27 @@ function extractUniqueId(text) {
 
   }
 
+
   return text;
 
 }
 
 
 /*******************************************************
- * STOP CAMERA
+ * STOP SCANNER
  *******************************************************/
 
 async function stopScanner() {
 
-  if (!html5QrCode || !scannerRunning) {
+  if (
+    !html5QrCode ||
+    !scannerRunning
+  ) {
+
     return;
+
   }
+
 
   try {
 
@@ -646,7 +772,9 @@ async function stopScanner() {
 
     html5QrCode.clear();
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     console.log(
       "Scanner stop:",
@@ -655,26 +783,42 @@ async function stopScanner() {
 
   }
 
+
   scannerRunning = false;
 
 }
 
 
 /*******************************************************
- * SEND CHECK-IN TO APPS SCRIPT
+ * SEND CHECK-IN
  *******************************************************/
 
-function sendCheckIn(uniqueId) {
+function sendCheckIn(
+  uniqueId
+) {
 
   const iframe =
-    document.getElementById("backendFrame");
+    document.getElementById(
+      "backendFrame"
+    );
+
 
   const url =
     BACKEND_URL +
-    "?action=checkin&id=" +
-    encodeURIComponent(uniqueId) +
+    "?action=checkin" +
+    "&id=" +
+    encodeURIComponent(
+      uniqueId
+    ) +
     "&t=" +
     Date.now();
+
+
+  console.log(
+    "Sending check-in:",
+    url
+  );
+
 
   iframe.src = url;
 
@@ -682,47 +826,161 @@ function sendCheckIn(uniqueId) {
 
 
 /*******************************************************
- * BACKEND RESPONSE
+ * SEND SEARCH
+ *******************************************************/
+
+function performSearch() {
+
+  const input =
+    document.getElementById(
+      "searchInput"
+    );
+
+
+  const query =
+    input.value.trim();
+
+
+  if (!query) {
+
+    input.focus();
+
+    return;
+
+  }
+
+
+  console.log(
+    "Searching:",
+    query
+  );
+
+
+  showLoading();
+
+
+  const iframe =
+    document.getElementById(
+      "backendFrame"
+    );
+
+
+  const url =
+    BACKEND_URL +
+    "?action=search" +
+    "&q=" +
+    encodeURIComponent(
+      query
+    ) +
+    "&t=" +
+    Date.now();
+
+
+  console.log(
+    "Search URL:",
+    url
+  );
+
+
+  iframe.src = url;
+
+}
+
+
+/*******************************************************
+ * ONE UNIFIED BACKEND RESPONSE LISTENER
  *******************************************************/
 
 window.addEventListener(
   "message",
   function(event) {
 
+
     const iframe =
-      document.getElementById("backendFrame");
+      document.getElementById(
+        "backendFrame"
+      );
+
 
     /*
-     * Only accept messages from our
-     * hidden backend iframe.
+     * Make sure the message really
+     * came from our hidden iframe.
      */
 
     if (
       !iframe ||
-      event.source !== iframe.contentWindow
+      event.source !==
+      iframe.contentWindow
     ) {
+
       return;
+
     }
+
+
+    /*
+     * Make sure it is our backend
+     * response.
+     */
 
     if (
       !event.data ||
       event.data.type !==
       "CHECKIN_BACKEND_RESPONSE"
     ) {
+
       return;
+
     }
 
-    hideLoading();
 
     const data =
       event.data.data;
+
 
     console.log(
       "Backend response:",
       data
     );
 
-    handleBackendResult(data);
+
+    /*
+     * =========================
+     * SEARCH RESPONSE
+     * =========================
+     */
+
+    if (
+      data &&
+      data.status ===
+      "SEARCH_RESULTS"
+    ) {
+
+      hideLoading();
+
+
+      displaySearchResults(
+        data.results || []
+      );
+
+
+      return;
+
+    }
+
+
+    /*
+     * =========================
+     * CHECK-IN RESPONSE
+     * =========================
+     */
+
+    hideLoading();
+
+
+    handleBackendResult(
+      data
+    );
 
   }
 );
@@ -732,23 +990,40 @@ window.addEventListener(
  * HANDLE CHECK-IN RESULT
  *******************************************************/
 
-function handleBackendResult(data) {
+function handleBackendResult(
+  data
+) {
+
 
   if (!data) {
 
     showResult(
+
       "ERROR",
+
       "ERROR",
+
       "",
+
       "",
+
       "No response received from server."
+
     );
 
     return;
+
   }
 
 
-  if (data.status === "CHECKED_IN") {
+  /*
+   * SUCCESS
+   */
+
+  if (
+    data.status ===
+    "CHECKED_IN"
+  ) {
 
     showResult(
 
@@ -769,8 +1044,13 @@ function handleBackendResult(data) {
     );
 
     return;
+
   }
 
+
+  /*
+   * ALREADY CHECKED IN
+   */
 
   if (
     data.status ===
@@ -796,8 +1076,13 @@ function handleBackendResult(data) {
     );
 
     return;
+
   }
 
+
+  /*
+   * ID NOT FOUND
+   */
 
   if (
     data.status ===
@@ -819,8 +1104,13 @@ function handleBackendResult(data) {
     );
 
     return;
+
   }
 
+
+  /*
+   * OTHER ERROR
+   */
 
   showResult(
 
@@ -852,35 +1142,42 @@ function showResult(
   message
 ) {
 
+
   const overlay =
     document.getElementById(
       "resultOverlay"
     );
+
 
   const icon =
     document.getElementById(
       "resultIcon"
     );
 
+
   const titleElement =
     document.getElementById(
       "resultTitle"
     );
+
 
   const nameElement =
     document.getElementById(
       "resultName"
     );
 
+
   const detailsElement =
     document.getElementById(
       "resultDetails"
     );
 
+
   const messageElement =
     document.getElementById(
       "resultMessage"
     );
+
 
   const countdownElement =
     document.getElementById(
@@ -892,25 +1189,45 @@ function showResult(
     "result-icon";
 
 
-  if (type === "SUCCESS") {
+  /*
+   * SUCCESS
+   */
+
+  if (
+    type === "SUCCESS"
+  ) {
 
     icon.classList.add(
       "success-icon"
     );
 
-    icon.textContent = "✓";
+    icon.textContent =
+      "✓";
 
   }
 
-  else if (type === "WARNING") {
+
+  /*
+   * WARNING
+   */
+
+  else if (
+    type === "WARNING"
+  ) {
 
     icon.classList.add(
       "warning-icon"
     );
 
-    icon.textContent = "!";
+    icon.textContent =
+      "!";
 
   }
+
+
+  /*
+   * ERROR
+   */
 
   else {
 
@@ -918,7 +1235,8 @@ function showResult(
       "error-icon"
     );
 
-    icon.textContent = "×";
+    icon.textContent =
+      "×";
 
   }
 
@@ -926,14 +1244,18 @@ function showResult(
   titleElement.textContent =
     title;
 
+
   nameElement.textContent =
     name || "";
+
 
   detailsElement.innerHTML =
     details || "";
 
+
   messageElement.textContent =
     message || "";
+
 
   countdownElement.textContent =
     "Returning to scanner in 2 seconds...";
@@ -946,36 +1268,53 @@ function showResult(
 
   let seconds = 2;
 
-  clearInterval(resetTimer);
+
+  clearInterval(
+    resetTimer
+  );
 
 
   resetTimer =
-    setInterval(function() {
+    setInterval(
+      function() {
 
-      seconds--;
+        seconds--;
 
-      if (seconds <= 0) {
 
-        clearInterval(resetTimer);
+        if (
+          seconds <= 0
+        ) {
 
-        hideResult();
+          clearInterval(
+            resetTimer
+          );
 
-        resetApp();
 
-      }
+          hideResult();
 
-      else {
 
-        countdownElement.textContent =
-          "Returning to scanner in " +
-          seconds +
-          " second" +
-          (seconds === 1 ? "" : "s") +
-          "...";
+          resetApp();
 
-      }
+        }
 
-    }, 1000);
+        else {
+
+          countdownElement.textContent =
+            "Returning to scanner in " +
+            seconds +
+            " second" +
+            (
+              seconds === 1
+                ? ""
+                : "s"
+            ) +
+            "...";
+
+        }
+
+      },
+      1000
+    );
 
 }
 
@@ -1005,17 +1344,20 @@ async function resetApp() {
 
   processingScan = false;
 
+
   document
     .getElementById(
       "searchResults"
     )
     .innerHTML = "";
 
+
   document
     .getElementById(
       "searchInput"
     )
     .value = "";
+
 
   document
     .getElementById(
@@ -1024,13 +1366,14 @@ async function resetApp() {
     .textContent =
     "Starting camera...";
 
+
   await startScanner();
 
 }
 
 
 /*******************************************************
- * LOADING
+ * SHOW LOADING
  *******************************************************/
 
 function showLoading() {
@@ -1045,6 +1388,10 @@ function showLoading() {
 
 }
 
+
+/*******************************************************
+ * HIDE LOADING
+ *******************************************************/
 
 function hideLoading() {
 
@@ -1063,26 +1410,22 @@ function hideLoading() {
  * MASK IC
  *******************************************************/
 
-function maskIC(ic) {
+function maskIC(
+  ic
+) {
 
   if (!ic) {
     return "";
   }
 
+
   const value =
     String(ic);
 
-  /*
-   * Example:
-   *
-   * 900101-01-1234
-   *
-   * becomes:
-   *
-   * 900101-01-****
-   */
 
-  if (value.length >= 4) {
+  if (
+    value.length >= 4
+  ) {
 
     return (
       value.substring(
@@ -1094,107 +1437,10 @@ function maskIC(ic) {
 
   }
 
+
   return "****";
 
 }
-
-
-/*******************************************************
- * MANUAL SEARCH
- *******************************************************/
-
-function performSearch() {
-
-  const input =
-    document.getElementById(
-      "searchInput"
-    );
-
-  const query =
-    input.value.trim();
-
-  if (!query) {
-
-    return;
-
-  }
-
-  showLoading();
-
-  const iframe =
-    document.getElementById(
-      "backendFrame"
-    );
-
-  const url =
-    BACKEND_URL +
-    "?action=search&q=" +
-    encodeURIComponent(query) +
-    "&t=" +
-    Date.now();
-
-  iframe.src = url;
-
-}
-
-
-/*******************************************************
- * HANDLE SEARCH RESPONSE
- *
- * We use the same postMessage
- * listener, but need to distinguish
- * SEARCH_RESULTS.
- *******************************************************/
-
-
-/*
- * Replace the original backend listener
- * behavior for SEARCH_RESULTS.
- */
-
-window.addEventListener(
-  "message",
-  function(event) {
-
-    const iframe =
-      document.getElementById(
-        "backendFrame"
-      );
-
-    if (
-      !iframe ||
-      event.source !== iframe.contentWindow
-    ) {
-      return;
-    }
-
-    if (
-      !event.data ||
-      event.data.type !==
-      "CHECKIN_BACKEND_RESPONSE"
-    ) {
-      return;
-    }
-
-    const data =
-      event.data.data;
-
-    if (
-      data &&
-      data.status ===
-      "SEARCH_RESULTS"
-    ) {
-
-      hideLoading();
-
-      displaySearchResults(
-        data.results || []
-      );
-
-    }
-
-  }
-);
 
 
 /*******************************************************
@@ -1205,20 +1451,32 @@ function displaySearchResults(
   results
 ) {
 
+
   const container =
     document.getElementById(
       "searchResults"
     );
 
+
   container.innerHTML = "";
 
 
-  if (!results.length) {
+  /*
+   * NOTHING FOUND
+   */
+
+  if (
+    !results.length
+  ) {
 
     container.innerHTML = `
+
       <div class="result-card">
+
         No participant found.
+
       </div>
+
     `;
 
     return;
@@ -1226,71 +1484,87 @@ function displaySearchResults(
   }
 
 
-  results.forEach(function(person) {
+  /*
+   * SHOW RESULTS
+   */
 
-    const card =
-      document.createElement(
-        "div"
-      );
-
-    card.className =
-      "result-card";
+  results.forEach(
+    function(person) {
 
 
-    const statusText =
-      person.checkedIn
-
-        ? "Already checked in: " +
-          person.checkInTime
-
-        : "Not checked in";
+      const card =
+        document.createElement(
+          "div"
+        );
 
 
-    const actionButton =
-      person.checkedIn
+      card.className =
+        "result-card";
 
-        ? ""
 
-        : `
+      const statusText =
+        person.checkedIn
+
+          ? "Already checked in: " +
+            person.checkInTime
+
+          : "Not checked in";
+
+
+      let actionButton = "";
+
+
+      if (
+        !person.checkedIn
+      ) {
+
+        actionButton = `
+
           <button
             class="btn btn-success"
             onclick="manualCheckIn('${escapeJs(person.uniqueId)}')"
           >
             CHECK IN
           </button>
+
         `;
 
-
-    card.innerHTML = `
-
-      <div class="result-name">
-        ${escapeHtml(person.name)}
-      </div>
-
-      <div class="result-info">
-        IC: ${escapeHtml(maskIC(person.ic))}
-      </div>
-
-      <div class="result-info">
-        ID: ${escapeHtml(person.uniqueId)}
-      </div>
-
-      <div class="result-info">
-        ${escapeHtml(statusText)}
-      </div>
-
-      <div class="result-actions">
-        ${actionButton}
-      </div>
-
-    `;
+      }
 
 
-    container.appendChild(
-      card
-    );
+      card.innerHTML = `
 
-  });
+        <div class="result-name">
+          ${escapeHtml(person.name)}
+        </div>
+
+        <div class="result-info">
+          IC:
+          ${escapeHtml(maskIC(person.ic))}
+        </div>
+
+        <div class="result-info">
+          ID:
+          ${escapeHtml(person.uniqueId)}
+        </div>
+
+        <div class="result-info">
+          ${escapeHtml(statusText)}
+        </div>
+
+        <div class="result-actions">
+          ${actionButton}
+        </div>
+
+      `;
+
+
+      container.appendChild(
+        card
+      );
+
+    }
+  );
 
 }
 
@@ -1303,19 +1577,32 @@ function manualCheckIn(
   uniqueId
 ) {
 
+
+  console.log(
+    "Manual check-in:",
+    uniqueId
+  );
+
+
   showLoading();
+
 
   const iframe =
     document.getElementById(
       "backendFrame"
     );
 
+
   const url =
     BACKEND_URL +
-    "?action=checkin&id=" +
-    encodeURIComponent(uniqueId) +
+    "?action=checkin" +
+    "&id=" +
+    encodeURIComponent(
+      uniqueId
+    ) +
     "&t=" +
     Date.now();
+
 
   iframe.src = url;
 
@@ -1323,28 +1610,37 @@ function manualCheckIn(
 
 
 /*******************************************************
- * SECURITY HELPERS
+ * ESCAPE HTML
  *******************************************************/
 
-function escapeHtml(value) {
+function escapeHtml(
+  value
+) {
 
-  return String(value || "")
+  return String(
+    value || ""
+  )
+
     .replace(
       /&/g,
       "&amp;"
     )
+
     .replace(
       /</g,
       "&lt;"
     )
+
     .replace(
       />/g,
       "&gt;"
     )
+
     .replace(
       /"/g,
       "&quot;"
     )
+
     .replace(
       /'/g,
       "&#039;"
@@ -1353,21 +1649,33 @@ function escapeHtml(value) {
 }
 
 
-function escapeJs(value) {
+/*******************************************************
+ * ESCAPE JAVASCRIPT STRING
+ *******************************************************/
 
-  return String(value || "")
+function escapeJs(
+  value
+) {
+
+  return String(
+    value || ""
+  )
+
     .replace(
       /\\/g,
       "\\\\"
     )
+
     .replace(
       /'/g,
       "\\'"
     )
+
     .replace(
       /\r/g,
       "\\r"
     )
+
     .replace(
       /\n/g,
       "\\n"
@@ -1377,7 +1685,7 @@ function escapeJs(value) {
 
 
 /*******************************************************
- * ENTER KEY FOR SEARCH
+ * SEARCH ENTER KEY
  *******************************************************/
 
 document
@@ -1389,7 +1697,8 @@ document
     function(event) {
 
       if (
-        event.key === "Enter"
+        event.key ===
+        "Enter"
       ) {
 
         performSearch();
@@ -1401,7 +1710,7 @@ document
 
 
 /*******************************************************
- * START APPLICATION
+ * START APP
  *******************************************************/
 
 window.addEventListener(
@@ -1417,3 +1726,4 @@ window.addEventListener(
 
 </body>
 </html>
+```
